@@ -1,5 +1,6 @@
 package com.main.recipebook.controller;
 
+import com.main.recipebook.constant.UrlConstants;
 import com.main.recipebook.dto.AuthenticationtResponse;
 import com.main.recipebook.model.User;
 import com.main.recipebook.service.AuthService;
@@ -15,13 +16,13 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/register")
+    @PostMapping(UrlConstants.REGISTER)
     public ResponseEntity<AuthenticationtResponse> register(@RequestBody User user)
     {
             return ResponseEntity.ok(authService.register(user));
     }
 
-    @PostMapping("/login")
+    @PostMapping(UrlConstants.LOGIN)
     public ResponseEntity<AuthenticationtResponse> login(@RequestBody User user)
     {
         return ResponseEntity.ok(authService.authenticate(user));
