@@ -1,6 +1,6 @@
 package com.main.recipebook.service;
 
-import com.main.recipebook.constant.ErrorCodeEuum;
+import com.main.recipebook.constant.ErrorCodeEnum;
 import com.main.recipebook.dto.AuthenticationtResponse;
 import com.main.recipebook.constant.Role;
 import com.main.recipebook.exception.RecipeBookException;
@@ -34,7 +34,7 @@ public class AuthService {
     public AuthenticationtResponse register(User request) {
         if(checkUserExist(request.getUsername()))
         {
-                throw new RecipeBookException(HttpStatus.BAD_REQUEST, ErrorCodeEuum.USER_EXIST_ALREADY.getErrorCode(), ErrorCodeEuum.USER_EXIST_ALREADY.getErrorMessage());
+                throw new RecipeBookException(HttpStatus.BAD_REQUEST, ErrorCodeEnum.USER_EXIST_ALREADY.getErrorCode(), ErrorCodeEnum.USER_EXIST_ALREADY.getErrorMessage());
         }
         User user = User.builder().name(request.getName()).username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -58,6 +58,8 @@ public class AuthService {
     }
 
     public AuthenticationtResponse authenticate(User request) {
+
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         User user = userRepo.findByUsername(request.getUsername()).orElseThrow();
