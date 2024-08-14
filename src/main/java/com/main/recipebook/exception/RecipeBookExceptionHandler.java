@@ -3,12 +3,14 @@ package com.main.recipebook.exception;
 import com.main.recipebook.constant.ErrorCodeEnum;
 import com.main.recipebook.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -55,14 +57,17 @@ public class RecipeBookExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex)
     {
         log.info("Validation Exception -> "+ex.getMessage());
-        ErrorResponse errorResponse=  ErrorResponse.builder().errorCode(ErrorCodeEnum.VALIDATION_EXCEPTION.getErrorCode()).errorMessage(ex.getBindingResult().toString()).build();
+        var collect = ex.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining(","));
+        ErrorResponse errorResponse=  ErrorResponse.builder().errorCode(ErrorCodeEnum.VALIDATION_EXCEPTION.getErrorCode()).errorMessage(collect).build();
 
         log.info(" Error Response -->"+errorResponse);
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
     }
-
-
 
 }
