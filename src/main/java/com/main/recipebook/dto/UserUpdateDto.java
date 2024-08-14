@@ -12,23 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
-
-
-    private Long id;
+public class UserUpdateDto {
 
     @NotBlank(message = "Name is mandatory")
     @Size(min = 5, max = 15, message = "name must be between 5 and 30 characters")
     private String name;
-
-    @NotBlank(message = "Username is mandatory")
-    @Size(min = 5, max = 15, message = "Username must be between 5 and 15 characters")
-    private String username;
-
-    @NotBlank(message = "Password.required")
-    @Size(min = 8, message = "{password.length.required}")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",message = "Password should be in 8 words including Numeric,alphabets and special character")
-    private String password;
 
     @NotBlank(message = "Email is mandatory")
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email should be valid")
