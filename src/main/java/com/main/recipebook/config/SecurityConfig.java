@@ -1,8 +1,9 @@
 package com.main.recipebook.config;
 
+import com.main.recipebook.constant.Role;
 import com.main.recipebook.filter.JwtAuthenticationFilter;
 import com.main.recipebook.service.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
+
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,8 +35,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req->req.requestMatchers("/login/**","/register/**")
                                 .permitAll()
-                                .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                                .requestMatchers("/user/**").hasAnyAuthority("USER")
+                                .requestMatchers("/admin/**").hasAnyAuthority(String.valueOf(Role.ADMIN))
+                                .requestMatchers("/user/**").hasAnyAuthority(String.valueOf(Role.USER))
                                 .anyRequest()
                                 .authenticated()
                 )

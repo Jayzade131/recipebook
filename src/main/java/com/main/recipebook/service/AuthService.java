@@ -1,37 +1,41 @@
 package com.main.recipebook.service;
 
 import com.main.recipebook.constant.ErrorCodeEnum;
-import com.main.recipebook.dto.AuthenticationtResponse;
 import com.main.recipebook.constant.Role;
+import com.main.recipebook.dto.AuthenticationtResponse;
+import com.main.recipebook.dto.UserDto;
 import com.main.recipebook.exception.RecipeBookException;
 import com.main.recipebook.model.User;
 import com.main.recipebook.repository.UserRepo;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private UserRepo userRepo;
+    @Value("${admin.password}")
+    private String adminPassword;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtService jwtService;
+    private final UserRepo userRepo;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
-    public AuthenticationtResponse register(User request) {
+    private final PasswordEncoder passwordEncoder;
+
+
+    private final JwtService jwtService;
+
+
+    private final AuthenticationManager authenticationManager;
+
+    public AuthenticationtResponse register(UserDto request) {
         if(checkUserExist(request.getUsername()))
         {
                 throw new RecipeBookException(HttpStatus.BAD_REQUEST, ErrorCodeEnum.USER_EXIST_ALREADY.getErrorCode(), ErrorCodeEnum.USER_EXIST_ALREADY.getErrorMessage());
@@ -49,12 +53,8 @@ public class AuthService {
     }
     public boolean checkUserExist(String username)
     {
-       Optional<User> user= userRepo.findByUsername(username);
-       if(user.isPresent())
-       {
-           return true;
-       }
-       return false;
+       return userRepo.findByUsername(username).isPresent();
+
     }
 
     public AuthenticationtResponse authenticate(User request) {
@@ -72,7 +72,7 @@ public class AuthService {
     public void createAdminAccount() {
         User adminAccount = userRepo.findByRole(Role.ADMIN);
         if (null == adminAccount) {
-            User user = User.builder().name("admin").username("admin01").password(passwordEncoder.encode("Admin@123"))
+            User user = User.builder().name("admin").username("admin01").password(passwordEncoder.encode(adminPassword))
                     .email("adminaccount@gmail.com").role(Role.ADMIN).build();
             userRepo.save(user);
 
