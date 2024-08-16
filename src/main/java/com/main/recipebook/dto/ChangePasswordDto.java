@@ -8,31 +8,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserDto implements Serializable {
+public class ChangePasswordDto {
 
-
-    private Long id;
-
-    @NotBlank(message = "Name is mandatory")
-    @Size(min = 5, max = 15, message = "name must be between 5 and 30 characters")
-    private String name;
-
-    @NotBlank(message = "Username is mandatory")
-    @Size(min = 5, max = 15, message = "Username must be between 5 and 15 characters")
     private String username;
 
     @NotBlank(message = "Password.required")
     @Size(min = 8, message = "{password.length.required}")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",message = "Password should be in 8 words including Numeric,alphabets and special character")
-    private String password;
+    private String oddPassword;
 
-    @NotBlank(message = "Email is mandatory")
-    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email should be valid")
-    private String email;
+    @NotBlank(message = "Password.required")
+    @Size(min = 8, message = "{password.length.required}")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",message = "Password should be in 8 words including Numeric,alphabets and special character")
+    private String newPassword;
 }

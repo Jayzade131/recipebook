@@ -1,6 +1,7 @@
 package com.main.recipebook.usercontroller;
 
 import com.main.recipebook.constant.UrlConstants;
+import com.main.recipebook.dto.ChangePasswordDto;
 import com.main.recipebook.dto.UserDto;
 import com.main.recipebook.dto.UserUpdateDto;
 import com.main.recipebook.userservice.UserService;
@@ -27,6 +28,13 @@ public class UserController {
     {
         userService.updateUserDetails(username,userUpdateDto);
         return ResponseEntity.ok("User Update Successfully");
+    }
+
+    @PutMapping(UrlConstants.CHANGE_PASSWORD)
+    public ResponseEntity<?> changepassword(@RequestBody ChangePasswordDto changePasswordDto)
+    {
+        userService.changepassword(changePasswordDto);
+        return ResponseEntity.ok("Password Changed Successfully");
     }
 
 

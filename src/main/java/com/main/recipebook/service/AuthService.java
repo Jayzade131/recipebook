@@ -33,6 +33,10 @@ public class AuthService {
     private final JwtService jwtService;
 
 
+
+    private final OtpService otpService;
+
+
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationtResponse register(UserDto request) {
@@ -78,5 +82,25 @@ public class AuthService {
 
         }
 
+    }
+
+    public void resetPassword(String email, String otp, String newPassword) {
+
+        if(otpService.validateOtp(email,otp))
+        {
+
+
+            User user = userRepo.findByEmail(email).orElseThrow(()-> new RecipeBookException(HttpStatus.BAD_REQUEST,ErrorCodeEnum.EMAIL_NOT_FOUND.getErrorCode(),ErrorCodeEnum.EMAIL_NOT_FOUND.getErrorMessage()));
+            if(this.passwordEncoder.matches(newPassword,user.getPassword()))
+            {
+                throw new RecipeBookException(HttpStatus.BAD_REQUEST,ErrorCodeEnum.PASSWORD_SAME.getErrorCode(),ErrorCodeEnum.PASSWORD_SAME.getErrorMessage());
+            }
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepo.save(user);
+        }
+        else
+        {
+            throw new RecipeBookException(HttpStatus.BAD_REQUEST,ErrorCodeEnum.OTP_INVALID.getErrorCode(),ErrorCodeEnum.OTP_INVALID.getErrorMessage());
+        }
     }
 }
