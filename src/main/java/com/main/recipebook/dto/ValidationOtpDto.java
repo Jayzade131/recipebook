@@ -1,0 +1,19 @@
+package com.main.recipebook.dto;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ValidationOtpDto {
+
+    private String email;
+
+    private String otp;
+
+    private String newPassword;
+
+}
