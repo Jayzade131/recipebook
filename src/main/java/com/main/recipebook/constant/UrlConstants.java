@@ -8,4 +8,5 @@ public class UrlConstants {
     public static final String CHANGE_PASSWORD="/changepassword";
     public static final String OTP = "/sendotp/{email}";
     public static final String VALIDATE_OTP = "/validateotp";
+    public static final String ADD_RECIPE = "/addrecipe";
 }
